@@ -1,0 +1,15 @@
+resolver: lts-16.13
+
+# TODO : Fix this.
+allow-newer : true
+packages:
+  - .
+  - ./haskell/kubernetes
+  - ./haskell/kubernetes-client
+
+# TODO : Fix these dependencies.
+extra-deps:
+  - katip-0.8.1.0
+  - jsonpath-0.1.0.2@sha256:5777d0fa65d697a0375c51189cdd632280c1ab5fed4c82664dcd888bfdc32ec2,2195
+  - oidc-client-0.4.0.1@sha256:d35d29351ea7db2aa0ecd4b4792b8bac4bf13f10c050e3c0cab0072b74acd996,3306
+  - uri-bytestring-aeson-0.1.0.7@sha256:33d83caa4704f07112564b98cb4b2e7b87f3f185e2e520c8d3444b95967d11f3,1103  

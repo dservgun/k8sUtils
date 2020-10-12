@@ -1,0 +1,30 @@
+name: k8s-util
+version: 0.0.0.1
+description: Sample pods, deployments
+synopsis: Kubernetes pods and deployments for deena
+maintainer: dinkar.ganti@gmail.com
+category: Kubernetes
+license: AllRightsReserved
+
+library:
+  source-dirs : lib
+
+
+executables:
+  simple:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -Wall
+dependencies:
+- base
+- containers
+- data-default
+- http-client
+- http-types
+- kubernetes-client
+- kubernetes-client-core
+- microlens
+- safe-exceptions
+- stm
+- text
