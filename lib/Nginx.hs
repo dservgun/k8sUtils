@@ -4,20 +4,21 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 21:34:32
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-11 23:54:26
+-- @Last Modified time: 2020-10-12 15:33:22
 
 module Nginx where
 
 import CommonTypes
+import Data.Coerce
+import Data.Default
+import Data.Map
+import Data.Text
 import Kubernetes.Client
 import Kubernetes.OpenAPI
 import Kubernetes.OpenAPI.API.AppsV1
 import Kubernetes.OpenAPI.API.CoreV1
 import Lens.Micro
-import Data.Default
-import Data.Map
-import Data.Text
-import Data.Coerce
+import GHC.Natural
 
 {--
 
@@ -49,26 +50,67 @@ data NginxParameters = NginxParameters {
   , _metadataName :: Name
   , _appName :: AppName
   , _replicas :: ReplicaCount
-  , _image :: DockerImage
+  , _nginxImage :: DockerImage
   , _containerPort :: ContainerPort
 } deriving (Show)
+
+instance Default NginxParameters where
+  def =
+    NginxParameters
+      (APIVersion "apps/v1")
+      (Namespace "default")
+      (Name "nginx-deployment")
+      (AppName "nginx")
+      (ReplicaCount 2)
+      (DockerImage "nginx:1.7.9")
+      (ContainerPort 80)
 
 -- Lenses
 apiVersion :: Lens' NginxParameters APIVersion
 apiVersion =
   lens _apiVersion (\nginxParameters' apiVersion' -> nginxParameters' {_apiVersion = apiVersion'})
 
+namespace :: Lens' NginxParameters Namespace
+namespace =
+  lens _namespace (\nginxParameters' namespace' -> nginxParameters' {_namespace = namespace'})
+
+metadataName :: Lens' NginxParameters Name
+metadataName =
+  lens _metadataName (\nginxParameters' metadataName' -> nginxParameters' {_metadataName = metadataName'})
+
 appName :: Lens' NginxParameters AppName
 appName =
   lens _appName (\nginxParameters' appName' -> nginxParameters' {_appName = appName'})
+
+replicas :: Lens' NginxParameters ReplicaCount
+replicas =
+  lens _replicas (\nginxParameters' replicaCount' -> nginxParameters' {_replicas = replicaCount'})
+
+nginxImage :: Lens' NginxParameters DockerImage
+nginxImage =
+  lens _nginxImage (\nginxParameters' nginxImage' -> nginxParameters' {_nginxImage = nginxImage'})
+
+containerPort :: Lens' NginxParameters ContainerPort
+containerPort =
+  lens _containerPort (\nginxParameters' containerPort' -> nginxParameters' {_containerPort = containerPort'})
+
 
 
 makeDeployment :: NginxParameters -> V1Deployment
 makeDeployment nginxParams =
   mkV1Deployment &
     v1DeploymentMetadataL .~ (Just mkV1ObjectMeta) &
-    v1DeploymentMetadataL . _Just . v1ObjectMetaNameL .~ (Just undefined) &
+    v1DeploymentMetadataL . _Just . v1ObjectMetaNameL .~ (Just . coerce $ nginxParams ^. metadataName) &
     v1DeploymentApiVersionL .~ (Just . coerce $ nginxParams ^. Nginx.apiVersion) &
     v1DeploymentKindL .~ (Just "deployment") &
     v1DeploymentSpecL .~ (Just $ mkV1DeploymentSpec mkV1LabelSelector mkV1PodTemplateSpec) &
-    v1DeploymentSpecL . _Just . v1DeploymentSpecSelectorL . v1LabelSelectorMatchLabelsL .~ (Just $ fromList [("app", coerce $ nginxParams ^. appName)])
+    v1DeploymentSpecL . _Just . v1DeploymentSpecSelectorL . v1LabelSelectorMatchLabelsL .~ (Just $ fromList [("app", coerce $ nginxParams ^. appName)]) &
+    v1DeploymentSpecL . _Just . v1DeploymentSpecReplicasL .~ (Just . naturalToInt . coerce $ nginxParams ^. replicas) &
+    v1DeploymentSpecL . _Just . v1DeploymentSpecTemplateL . v1PodTemplateSpecSpecL .~ (Just $ mkV1PodSpec [mkV1Container "nginx"]) &
+    v1DeploymentSpecL . _Just . v1DeploymentSpecTemplateL . v1PodTemplateSpecSpecL . _Just . v1PodSpecContainersL .~ 
+      [
+        mkV1Container "nginx" &
+          v1ContainerNameL .~ (coerce $ nginxParams ^. appName) &
+          v1ContainerPortsL .~ (Just [mkV1ContainerPort $ naturalToInt . coerce $ nginxParams ^. containerPort]) &
+          v1ContainerImageL .~ (Just $ coerce $ nginxParams ^. nginxImage)
+      ]
