@@ -8,7 +8,7 @@ import PodParameters
 import Data.Coerce
 import Data.Default
 import Data.Map
-import Data.Text
+import Data.Text as Text
 import Kubernetes.Client
 import Kubernetes.OpenAPI
 import Kubernetes.OpenAPI.API.AppsV1
@@ -41,7 +41,8 @@ data GPUParameters = GPUParameters {
   , _podName :: PodName
   , _restartPolicy :: RestartPolicy
   , _cudaImage :: DockerImage
-  , _vendorName :: GPUVendor
+  , _vendor :: GPUVendor
+  , _quantity :: Int
   }
 
 instance Default GPUParameters where
@@ -54,6 +55,7 @@ instance Default GPUParameters where
       def
       (DockerImage "k8s.gcr.io/cuda-vector-add:v0.1")
       def
+      1
 
 instance PodParameters GPUParameters where
   apiVersion :: Lens' GPUParameters APIVersion
@@ -76,3 +78,34 @@ instance PodParameters GPUParameters where
   restartPolicy =
     lens _restartPolicy (\gpuParameters' restartPolicy' -> gpuParameters' {_restartPolicy = restartPolicy'})
 
+
+gpuVendor :: Lens' GPUParameters GPUVendor
+gpuVendor =
+  lens _vendor (\gpuParameters' vendor' -> gpuParameters' {_vendor = vendor'})
+
+gpuQuantity :: Lens' GPUParameters Int
+gpuQuantity =
+  lens _quantity (\gpuParameters' quantity' -> gpuParameters' {_quantity = quantity'})
+
+makePod :: GPUParameters -> V1Pod
+makePod gpuParameters' =
+  mkV1Pod &
+    v1PodApiVersionL .~ (Just . coerce $ gpuParameters' ^. PodParameters.apiVersion) &
+    v1PodKindL .~ (Just "Pod") &
+    v1PodMetadataL .~ (Just mkV1ObjectMeta) &
+    v1PodMetadataL . _Just . v1ObjectMetaNameL .~ (Just . coerce $ gpuParameters' ^. podName) &
+    v1PodSpecL .~ (Just $ mkV1PodSpec []) &
+    v1PodSpecL . _Just . v1PodSpecRestartPolicyL .~ (Just $ Text.pack . show $ gpuParameters' ^. restartPolicy) &
+    v1PodSpecL . _Just . v1PodSpecContainersL .~ 
+        [
+          mkV1Container (coerce $ gpuParameters' ^. podName) &
+            v1ContainerImageL .~ (Just . coerce $ gpuParameters' ^. podImage) &
+            v1ContainerResourcesL .~ (Just mkV1ResourceRequirements) &
+            v1ContainerResourcesL . _Just . v1ResourceRequirementsLimitsL .~ 
+              ( -- TODO: this can get a bit hairy here.
+                Just $ fromList 
+                  [
+                    ( ((show $ gpuParameters' ^. gpuVendor) <> ".com/gpu"), Quantity . Text.pack . show $ gpuParameters' ^. gpuQuantity)
+                  ]
+              )
+        ]

@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 23:23:38
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-12 20:07:24
+-- @Last Modified time: 2020-10-12 22:21:49
 module CommonTypes where
 
 import Data.Text
@@ -40,7 +40,11 @@ newtype ContainerPort = ContainerPort Natural
   deriving Read via Natural
 
 data RestartPolicy = OnFailure | Never deriving (Show)
-data GPUVendor = AMD | NVIDIA deriving (Show)
+data GPUVendor = AMD | NVIDIA
+
+instance Show GPUVendor where
+  show AMD = "amd"
+  show NVIDIA = "nvidia"
 
 
 instance Default APIVersion where
