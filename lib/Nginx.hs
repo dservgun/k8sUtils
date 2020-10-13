@@ -1,14 +1,21 @@
 {-# language OverloadedStrings #-}
 {-# language DerivingVia       #-}
+{-# language InstanceSigs      #-}
 
 -- @Author: dinkar
 -- @Date:   2020-10-11 21:34:32
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-12 15:33:22
+-- @Last Modified time: 2020-10-12 20:24:29
 
-module Nginx where
+module Nginx
+  (
+    makeDeployment
+    , NginxParameters
+  )
+where
 
 import CommonTypes
+import DeploymentParameters
 import Data.Coerce
 import Data.Default
 import Data.Map
@@ -65,35 +72,34 @@ instance Default NginxParameters where
       (DockerImage "nginx:1.7.9")
       (ContainerPort 80)
 
--- Lenses
-apiVersion :: Lens' NginxParameters APIVersion
-apiVersion =
-  lens _apiVersion (\nginxParameters' apiVersion' -> nginxParameters' {_apiVersion = apiVersion'})
+instance DeploymentParameters NginxParameters where
+  apiVersion :: Lens' NginxParameters APIVersion
+  apiVersion =
+    lens _apiVersion (\nginxParameters' apiVersion' -> nginxParameters' {_apiVersion = apiVersion'})
 
-namespace :: Lens' NginxParameters Namespace
-namespace =
-  lens _namespace (\nginxParameters' namespace' -> nginxParameters' {_namespace = namespace'})
+  namespace :: Lens' NginxParameters Namespace
+  namespace =
+    lens _namespace (\nginxParameters' namespace' -> nginxParameters' {_namespace = namespace'})
 
-metadataName :: Lens' NginxParameters Name
-metadataName =
-  lens _metadataName (\nginxParameters' metadataName' -> nginxParameters' {_metadataName = metadataName'})
+  metadataName :: Lens' NginxParameters Name
+  metadataName =
+    lens _metadataName (\nginxParameters' metadataName' -> nginxParameters' {_metadataName = metadataName'})
 
-appName :: Lens' NginxParameters AppName
-appName =
-  lens _appName (\nginxParameters' appName' -> nginxParameters' {_appName = appName'})
+  appName :: Lens' NginxParameters AppName
+  appName =
+    lens _appName (\nginxParameters' appName' -> nginxParameters' {_appName = appName'})
 
-replicas :: Lens' NginxParameters ReplicaCount
-replicas =
-  lens _replicas (\nginxParameters' replicaCount' -> nginxParameters' {_replicas = replicaCount'})
+  replicas :: Lens' NginxParameters ReplicaCount
+  replicas =
+    lens _replicas (\nginxParameters' replicaCount' -> nginxParameters' {_replicas = replicaCount'})
 
-nginxImage :: Lens' NginxParameters DockerImage
-nginxImage =
-  lens _nginxImage (\nginxParameters' nginxImage' -> nginxParameters' {_nginxImage = nginxImage'})
+  deploymentImage :: Lens' NginxParameters DockerImage
+  deploymentImage =
+    lens _nginxImage (\nginxParameters' nginxImage' -> nginxParameters' {_nginxImage = nginxImage'})
 
-containerPort :: Lens' NginxParameters ContainerPort
-containerPort =
-  lens _containerPort (\nginxParameters' containerPort' -> nginxParameters' {_containerPort = containerPort'})
-
+  containerPort :: Lens' NginxParameters ContainerPort
+  containerPort =
+    lens _containerPort (\nginxParameters' containerPort' -> nginxParameters' {_containerPort = containerPort'})
 
 
 makeDeployment :: NginxParameters -> V1Deployment
@@ -101,7 +107,7 @@ makeDeployment nginxParams =
   mkV1Deployment &
     v1DeploymentMetadataL .~ (Just mkV1ObjectMeta) &
     v1DeploymentMetadataL . _Just . v1ObjectMetaNameL .~ (Just . coerce $ nginxParams ^. metadataName) &
-    v1DeploymentApiVersionL .~ (Just . coerce $ nginxParams ^. Nginx.apiVersion) &
+    v1DeploymentApiVersionL .~ (Just . coerce $ nginxParams ^. DeploymentParameters.apiVersion) &
     v1DeploymentKindL .~ (Just "deployment") &
     v1DeploymentSpecL .~ (Just $ mkV1DeploymentSpec mkV1LabelSelector mkV1PodTemplateSpec) &
     v1DeploymentSpecL . _Just . v1DeploymentSpecSelectorL . v1LabelSelectorMatchLabelsL .~ (Just $ fromList [("app", coerce $ nginxParams ^. appName)]) &
@@ -112,5 +118,5 @@ makeDeployment nginxParams =
         mkV1Container "nginx" &
           v1ContainerNameL .~ (coerce $ nginxParams ^. appName) &
           v1ContainerPortsL .~ (Just [mkV1ContainerPort $ naturalToInt . coerce $ nginxParams ^. containerPort]) &
-          v1ContainerImageL .~ (Just $ coerce $ nginxParams ^. nginxImage)
+          v1ContainerImageL .~ (Just $ coerce $ nginxParams ^. deploymentImage)
       ]
