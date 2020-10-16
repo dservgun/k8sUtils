@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 23:23:38
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-12 22:21:49
+-- @Last Modified time: 2020-10-16 16:03:04
 module CommonTypes where
 
 import Data.Text
@@ -41,6 +41,7 @@ newtype ContainerPort = ContainerPort Natural
 
 data RestartPolicy = OnFailure | Never deriving (Show)
 data GPUVendor = AMD | NVIDIA
+data StorageAccessMode = RWO | ROX | RWX deriving (Show)
 
 instance Show GPUVendor where
   show AMD = "amd"

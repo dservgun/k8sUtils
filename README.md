@@ -24,6 +24,9 @@ We may still need to maintain Internal modules to layer the interface; so much f
 The pods heavily rely on [microlens](https://hackage.haskell.org/package/microlens) as the client libraries provide code for these lenses. Yes we all feel the churn every time the installation compiles for the first time.
 
 ### A brief introduction to microlens for k8s
+Let us take the following example,
 
+`yaml
 
+`
 

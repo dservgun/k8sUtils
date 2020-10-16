@@ -1,7 +1,7 @@
 {-# language OverloadedStrings #-}
 {-# language InstanceSigs      #-}
 
-module DeployGPU where
+module GPU.DeployGPU where
 
 import CommonTypes
 import PodParameters

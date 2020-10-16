@@ -5,9 +5,9 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 21:34:32
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-12 20:24:29
+-- @Last Modified time: 2020-10-16 15:13:17
 
-module Nginx
+module Nginx.DeployNginx
   (
     makeDeployment
     , NginxParameters
