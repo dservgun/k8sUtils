@@ -22,6 +22,7 @@ dependencies:
 - data-default
 - http-client
 - http-types
+- iproute
 - kubernetes-client
 - kubernetes-client-core
 - microlens

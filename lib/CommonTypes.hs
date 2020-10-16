@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 23:23:38
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-16 16:03:04
+-- @Last Modified time: 2020-10-16 18:56:08
 module CommonTypes where
 
 import Data.Text
@@ -59,3 +59,46 @@ instance Default RestartPolicy where
 
 instance Default Namespace where
   def = Namespace "default"
+
+data AffinityPreset = SoftAffinityPreset | HardAffinityPreset deriving (Show, Read, Eq, Ord, Enum, Bounded)
+
+-- TODO: These types are part of the k8s api and ideally need to be promoted upstream.
+data CustomServiceType = ClusterIP | NodePort | LoadBalancer | ExternalName deriving (Show, Read, Eq, Ord, Enum, Bounded)
+data ExternalTrafficPolicy = Local deriving (Show, Read, Eq, Ord, Enum, Bounded)
+newtype LoadBalancerSourceRange = LoadBalancerSourceRange Text
+  deriving Show via Text
+  deriving Read via Text
+
+type Port = IntOrString
+
+newtype SiteName = SiteName Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype SidecarContainer = SidecarContainer Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype ServiceAccountName = ServiceAccountName Text
+  deriving Show via Text
+  deriving Read via Text
+
+data UpdateStrategy = Recreate | RollingUpdate Int
+  deriving (Show, Read)
+
+newtype Annotation = Annotatoin Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype Label = Label Text
+  deriving Show via Text
+  deriving Read via Text
+
+-- TODO:Merge this with the V1StorageClass, somehow.
+newtype StorageClass = StorageClass Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype NameOverride = NameOverride Text
+  deriving Show via Text
+  deriving Read via Text

@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-16 16:28:06
+-- @Last Modified time: 2020-10-16 19:14:28
 
 {-|
   -- TODO : Add comments for each attribute.
@@ -21,14 +21,13 @@ import Kubernetes.OpenAPI
 import Lens.Micro
 import CommonTypes
 import ImageTypes
+import Data.IP
 
-
--- TODO:Merge this with the V1StorageClass, somehow.
-newtype StorageClass = StorageClass Text
+newtype UserName = UserName Text
   deriving Show via Text
   deriving Read via Text
 
-newtype NameOverride = NameOverride Text
+newtype Password = Password Text
   deriving Show via Text
   deriving Read via Text
 
@@ -39,24 +38,6 @@ data GlobalConfiguration =
     , _storageClass :: StorageClass
   }
 
-newtype SidecarContainer = SidecarContainer Text
-  deriving Show via Text
-  deriving Read via Text
-
-newtype ServiceAccountName = ServiceAccountName Text
-  deriving Show via Text
-  deriving Read via Text
-
-data UpdateStrategy = Recreate | RollingUpdate Int
-  deriving (Show, Read)
-
-newtype Annotation = Annotatoin Text
-  deriving Show via Text
-  deriving Read via Text
-
-newtype Label = Label Text
-  deriving Show via Text
-  deriving Read via Text
 
 data CommonConfiguration = 
   CommonConfiguration {
@@ -75,15 +56,43 @@ data CommonConfiguration =
     , _serviceAccount :: ServiceAccountName
     , _createServiceAccount :: Bool
     , _podSecurityContext :: V1PodSecurityContext -- Use some sensible defaults.
-    , _persistenceEnabled :: Bool -- Whether to enable persistence based on Persistent Volume Claims
-    , _persistenceStorageClass :: V1StorageClass
-    , _persistenceExistingClaim :: V1PersistentVolumeClaim
-    , _persistenceAccessMode :: StorageAccessMode
-    , _persistenceSize :: Quantity -- Default : Quantity "10Gi"
     , _updateStrategy :: UpdateStrategy
     , _podAnnotations :: Set Annotation
     , _podLabels :: Set Label
     , _commonAnnotations :: Set Annotation
     , _commonLabels :: Set Label
+    , _persistenceParameters :: PersistenceParameters
+    , _podAffinity :: V1Affinity
+    , _nodeSelector :: Set Label -- Node labels for pod assignment.
+    , _tolerations :: Set V1Toleration
   }
+
+data PersistenceParameters = PersistenceParameters {
+  _persistenceEnabled :: Bool
+  , _persistenceStorageClass :: V1StorageClass
+  , _persistenceExistingClaim :: V1PersistentVolumeClaim
+  , _persistenceAccessMode :: StorageAccessMode
+  , _persistenceSize :: Quantity
+}
+
+data ServiceParameters = ServiceParameters {
+  _serviceType :: CustomServiceType
+  , _servicePort :: Port
+  , _serviceNodePort :: Port
+  , _serviceLoadBalancerIP :: IP
+  , _serviceExternalTrafficPolicy :: ExternalTrafficPolicy
+  , _serviceAnnotations :: Set Annotation
+  , _serviceLoadBalancerSourceRanges :: Set LoadBalancerSourceRange
+  , _serviceExtraPorts :: [Port]
+  , _serviceHttpPort :: Port
+}
+
+data DiscourseParameters = DiscourseParameters {
+  _discourseHost :: IP
+  , _discourseSiteName :: SiteName
+  , _discourseUserName :: UserName
+  , _discoursePassword :: Password
+  , _discourseExistingSecret :: V1Secret
+  
+}
 
