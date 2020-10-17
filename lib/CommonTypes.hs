@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 23:23:38
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-16 18:56:08
+-- @Last Modified time: 2020-10-16 23:35:13
 module CommonTypes where
 
 import Data.Text
@@ -102,3 +102,26 @@ newtype StorageClass = StorageClass Text
 newtype NameOverride = NameOverride Text
   deriving Show via Text
   deriving Read via Text
+
+newtype Email = Email Text -- TODO: define the email type.
+  deriving Show via Text
+  deriving Read via Text
+
+newtype Argument = Argument Text -- TODO : check if there is an argument type in the OpenAPI.
+  deriving Show via Text
+  deriving Read via Text
+
+newtype CustomCommand = CustomCommand Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype EnvVariable = EnvVariable Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype EnvValue = EnvValue Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype EnvironmentVariable = EnvironmentVariable (EnvVariable, EnvValue)
+  deriving (Show, Read)

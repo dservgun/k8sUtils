@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-16 19:14:28
+-- @Last Modified time: 2020-10-16 23:45:17
 
 {-|
   -- TODO : Add comments for each attribute.
@@ -17,6 +17,7 @@ module Discourse.DiscourseConfiguration where
 
 import Data.Set
 import Data.Text
+import Numeric.Natural
 import Kubernetes.OpenAPI
 import Lens.Micro
 import CommonTypes
@@ -93,6 +94,29 @@ data DiscourseParameters = DiscourseParameters {
   , _discourseUserName :: UserName
   , _discoursePassword :: Password
   , _discourseExistingSecret :: V1Secret
-  
+  , _discourseEmail :: Email
+  , _discourseCommand :: CustomCommand -- Custom command to override the image command.
+  , _discourseArgs :: [Argument]
+  , _discourseSecurityContext :: V1SecurityContext
+  , _discourseResources :: [V1ResourceRequirements]
+  , _discourseLivenessProbe :: ProbeParameters
+  , _discoruseReadinessProbe :: ProbeParameters
+  , _discourseCustomLivenessProbe :: ProbeParameters
+  , _discourseCustomReadinessProbe :: ProbeParameters
+  , _discourseExtraEnvironmentVariables :: Set EnvironmentVariable
+  , _discourseExtraEnvVarsConfigMaps :: V1ConfigMap
+  , _discourseExtraVolumeMounts :: Set V1PersistentVolume
+  , _discourseSkipInstall :: Bool
 }
+
+data ProbeParameters = ProbeParameters {
+    _probeEnabled :: Bool
+    , _probeInitialDelaySeconds :: Natural
+    , _probePeriodSeconds :: Natural
+    , _probeTimeoutSeconds :: Natural
+    , _probeFailureThreshold :: Natural
+    , _probeSuccessThreshold :: Natural
+}
+
+
 
