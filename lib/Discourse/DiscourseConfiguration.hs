@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-16 23:45:17
+-- @Last Modified time: 2020-10-18 14:54:38
 
 {-|
   -- TODO : Add comments for each attribute.
@@ -16,21 +16,18 @@
 module Discourse.DiscourseConfiguration where
 
 import Data.Set
+import Data.Map
 import Data.Text
 import Numeric.Natural
 import Kubernetes.OpenAPI
 import Lens.Micro
 import CommonTypes
+import CommonConfiguration
+import RedisParameters
 import ImageTypes
 import Data.IP
 
-newtype UserName = UserName Text
-  deriving Show via Text
-  deriving Read via Text
-
-newtype Password = Password Text
-  deriving Show via Text
-  deriving Read via Text
+type DiscourseFullName = DNSLabelName
 
 data GlobalConfiguration = 
   GlobalConfiguration {
@@ -39,41 +36,57 @@ data GlobalConfiguration =
     , _storageClass :: StorageClass
   }
 
+data ProbeParameters = ProbeParameters {
+    _probeEnabled :: Bool
+    , _probeInitialDelaySeconds :: Natural
+    , _probePeriodSeconds :: Natural
+    , _probeTimeoutSeconds :: Natural
+    , _probeFailureThreshold :: Natural
+    , _probeSuccessThreshold :: Natural
+}
 
-data CommonConfiguration = 
-  CommonConfiguration {
-    _replicaCount :: ReplicaCount
-    , _imageRegistry :: DockerImageRegistry
-    , _imageRepository :: DockerImageRepository
-    , _imageTag :: ImageTag
-    , _imagePullPolicy :: ImagePullPolicy
-    , _imageDebug :: Bool
-    , _imagePullSecrets :: DockerImagePullSecrets
-    , _nameOverride :: NameOverride
-    , _fullNameOverride :: NameOverride
-    , _extraVolumes :: [V1VolumeMount]
-    , _sideCarContainers :: [SidecarContainer]
-    , _initContainers :: [V1Container]
-    , _serviceAccount :: ServiceAccountName
-    , _createServiceAccount :: Bool
-    , _podSecurityContext :: V1PodSecurityContext -- Use some sensible defaults.
-    , _updateStrategy :: UpdateStrategy
-    , _podAnnotations :: Set Annotation
-    , _podLabels :: Set Label
-    , _commonAnnotations :: Set Annotation
-    , _commonLabels :: Set Label
-    , _persistenceParameters :: PersistenceParameters
-    , _podAffinity :: V1Affinity
-    , _nodeSelector :: Set Label -- Node labels for pod assignment.
-    , _tolerations :: Set V1Toleration
-  }
+data SidekiqParameters = SidekiqParameters {
+  _sidekiqSecurityContext :: V1SecurityContext
+  , _sidekiqCommand :: CustomCommand
+  , _sidekiqArgs :: [Argument]
+  , _sidekiqResources :: [V1ResourceRequirements]
+  , _sidekiqLivenessProbe :: ProbeParameters
+  , _sidekiqReadinessProbe :: ProbeParameters
+  , _sidekiqExtraEnvironmentVariables :: Set EnvironmentVariable
+  , _sidekiqExtraEnvVarsConfigMaps :: V1ConfigMap
+  , _sidekiqExtraEnvVarsSecret :: V1Secret
+  , _sidekiqExtraVolumeMounts :: Set V1PersistentVolume
+}
 
-data PersistenceParameters = PersistenceParameters {
-  _persistenceEnabled :: Bool
-  , _persistenceStorageClass :: V1StorageClass
-  , _persistenceExistingClaim :: V1PersistentVolumeClaim
-  , _persistenceAccessMode :: StorageAccessMode
-  , _persistenceSize :: Quantity
+data IngressParameters = IngressParameters {
+  _ingressEnabled :: Bool
+  , _ingressCertifateManager :: Set Annotation -- TODO: What is the annotation here?
+  , _ingressHostName :: HostName
+  , _ingressTLS :: Bool
+  , _ingressAnnotation :: Set Annotation
+  , _ingressExtraHosts :: Map Host (Maybe V1Secret)
+}
+
+data PostgresParameters = PostgresParameters {
+  _postgresEnabled :: Bool
+  , _postgresqlUserName :: UserName
+  , _postgressqlPassword :: Password
+  , _postgressqlPostgresPassword :: Password
+  , _postgresqlExistingSecret :: V1Secret
+  , _postgresqlDatabaseName :: DatabaseName
+  , _postgresqlPersistencEnabled :: Bool
+  , _externalDBParameters :: ExternalDBParameters
+}
+
+data ExternalDBParameters = ExternalDBParameters {
+  _hostName :: HostName
+  , _portNumber :: Port
+  , _externalUserName :: UserName
+  , _externalPassword :: Password
+  , _externalPostgresUser :: UserName
+  , _externalPostgresPassword :: Password
+  , _externalPostgresExistingSecret :: V1Secret
+  , _externalDatabase :: DatabaseName
 }
 
 data ServiceParameters = ServiceParameters {
@@ -90,6 +103,7 @@ data ServiceParameters = ServiceParameters {
 
 data DiscourseParameters = DiscourseParameters {
   _discourseHost :: IP
+  , _discourseFullName :: DiscourseFullName
   , _discourseSiteName :: SiteName
   , _discourseUserName :: UserName
   , _discoursePassword :: Password
@@ -109,14 +123,11 @@ data DiscourseParameters = DiscourseParameters {
   , _discourseSkipInstall :: Bool
 }
 
-data ProbeParameters = ProbeParameters {
-    _probeEnabled :: Bool
-    , _probeInitialDelaySeconds :: Natural
-    , _probePeriodSeconds :: Natural
-    , _probeTimeoutSeconds :: Natural
-    , _probeFailureThreshold :: Natural
-    , _probeSuccessThreshold :: Natural
-}
 
+discourseHost :: Lens' DiscourseParameters IP
+discourseHost =
+  lens _discourseHost (\discourseParameters' host' -> discourseParameters' {_discourseHost = host'})
 
-
+discourseFullName :: Lens' DiscourseParameters DiscourseFullName
+discourseFullName =
+  lens _discourseFullName (\discourseParameters' fullName' -> discourseParameters' {_discourseFullName = fullName'})

@@ -16,6 +16,7 @@ executables:
     source-dirs: app
     ghc-options:
     - -Wall
+    - -freverse-errors
 dependencies:
 - base
 - containers

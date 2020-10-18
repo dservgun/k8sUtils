@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 23:23:38
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-16 23:35:13
+-- @Last Modified time: 2020-10-18 10:33:44
 module CommonTypes where
 
 import Data.Text
@@ -123,5 +123,38 @@ newtype EnvValue = EnvValue Text
   deriving Show via Text
   deriving Read via Text
 
+newtype HostName = HostName Text
+  deriving Show via Text
+  deriving Read via Text
+
 newtype EnvironmentVariable = EnvironmentVariable (EnvVariable, EnvValue)
   deriving (Show, Read)
+
+newtype DNSLabelName = DNSLabelName Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype UserName = UserName Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype Password = Password Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype DatabaseName = DatabaseName Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype K8sKey = K8sKey Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype HostPath = HostPath Text
+  deriving Show via Text
+  deriving Read via Text
+
+newtype Host = Host (HostName, HostPath)
+  deriving (Show, Read)
+
+
