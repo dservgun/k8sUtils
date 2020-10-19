@@ -17,6 +17,21 @@ executables:
     ghc-options:
     - -Wall
     - -freverse-errors
+
+tests:
+  k8s-util-tasty:
+    source-dirs: tests
+    main: Main.hs
+    dependencies:
+      - k8s-util
+      - hedgehog
+      - hedgehog-quickcheck
+      - base
+      - tasty
+      - tasty-discover
+      - tasty-hunit
+      - tasty-hspec
+
 dependencies:
 - base
 - containers
