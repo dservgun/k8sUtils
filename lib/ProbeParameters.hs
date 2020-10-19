@@ -1,12 +1,14 @@
 -- @Author: dinkar
 -- @Date:   2020-10-18 20:38:01
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-18 20:50:23
+-- @Last Modified time: 2020-10-19 15:47:00
 module ProbeParameters where
 
 import Numeric.Natural
 import Lens.Micro
 
+type LivenessProbe = ProbeParameters
+type ReadinessProbe = ProbeParameters
 data ProbeParameters = ProbeParameters {
     _probeEnabled :: Bool
     , _probeInitialDelaySeconds :: Natural
