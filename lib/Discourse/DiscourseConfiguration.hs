@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-18 14:54:38
+-- @Last Modified time: 2020-10-18 20:54:24
 
 {-|
   -- TODO : Add comments for each attribute.
@@ -24,6 +24,8 @@ import Lens.Micro
 import CommonTypes
 import CommonConfiguration
 import RedisParameters
+import ProbeParameters
+import SidekiqParameters
 import ImageTypes
 import Data.IP
 
@@ -36,27 +38,6 @@ data GlobalConfiguration =
     , _storageClass :: StorageClass
   }
 
-data ProbeParameters = ProbeParameters {
-    _probeEnabled :: Bool
-    , _probeInitialDelaySeconds :: Natural
-    , _probePeriodSeconds :: Natural
-    , _probeTimeoutSeconds :: Natural
-    , _probeFailureThreshold :: Natural
-    , _probeSuccessThreshold :: Natural
-}
-
-data SidekiqParameters = SidekiqParameters {
-  _sidekiqSecurityContext :: V1SecurityContext
-  , _sidekiqCommand :: CustomCommand
-  , _sidekiqArgs :: [Argument]
-  , _sidekiqResources :: [V1ResourceRequirements]
-  , _sidekiqLivenessProbe :: ProbeParameters
-  , _sidekiqReadinessProbe :: ProbeParameters
-  , _sidekiqExtraEnvironmentVariables :: Set EnvironmentVariable
-  , _sidekiqExtraEnvVarsConfigMaps :: V1ConfigMap
-  , _sidekiqExtraEnvVarsSecret :: V1Secret
-  , _sidekiqExtraVolumeMounts :: Set V1PersistentVolume
-}
 
 data IngressParameters = IngressParameters {
   _ingressEnabled :: Bool
