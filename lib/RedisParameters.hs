@@ -21,6 +21,7 @@ data RedisParameters = RedisParameters {
 {- |
   * Deploy redis containers - default : True
 -}
+
 redisEnabled :: Lens' RedisParameters Bool
 redisEnabled =
   lens _redisEnabled (\redisParameters' enabled' -> redisParameters' {_redisEnabled = enabled'})

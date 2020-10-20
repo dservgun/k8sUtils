@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-18 20:54:24
+-- @Last Modified time: 2020-10-19 21:30:42
 
 {-|
   -- TODO : Add comments for each attribute.
@@ -26,6 +26,9 @@ import CommonConfiguration
 import RedisParameters
 import ProbeParameters
 import SidekiqParameters
+import PostgresParameters
+import ExternalDBParameters
+import ServiceParameters
 import ImageTypes
 import Data.IP
 
@@ -38,49 +41,6 @@ data GlobalConfiguration =
     , _storageClass :: StorageClass
   }
 
-
-data IngressParameters = IngressParameters {
-  _ingressEnabled :: Bool
-  , _ingressCertifateManager :: Set Annotation -- TODO: What is the annotation here?
-  , _ingressHostName :: HostName
-  , _ingressTLS :: Bool
-  , _ingressAnnotation :: Set Annotation
-  , _ingressExtraHosts :: Map Host (Maybe V1Secret)
-}
-
-data PostgresParameters = PostgresParameters {
-  _postgresEnabled :: Bool
-  , _postgresqlUserName :: UserName
-  , _postgressqlPassword :: Password
-  , _postgressqlPostgresPassword :: Password
-  , _postgresqlExistingSecret :: V1Secret
-  , _postgresqlDatabaseName :: DatabaseName
-  , _postgresqlPersistencEnabled :: Bool
-  , _externalDBParameters :: ExternalDBParameters
-}
-
-data ExternalDBParameters = ExternalDBParameters {
-  _hostName :: HostName
-  , _portNumber :: Port
-  , _externalUserName :: UserName
-  , _externalPassword :: Password
-  , _externalPostgresUser :: UserName
-  , _externalPostgresPassword :: Password
-  , _externalPostgresExistingSecret :: V1Secret
-  , _externalDatabase :: DatabaseName
-}
-
-data ServiceParameters = ServiceParameters {
-  _serviceType :: CustomServiceType
-  , _servicePort :: Port
-  , _serviceNodePort :: Port
-  , _serviceLoadBalancerIP :: IP
-  , _serviceExternalTrafficPolicy :: ExternalTrafficPolicy
-  , _serviceAnnotations :: Set Annotation
-  , _serviceLoadBalancerSourceRanges :: Set LoadBalancerSourceRange
-  , _serviceExtraPorts :: [Port]
-  , _serviceHttpPort :: Port
-}
 
 data DiscourseParameters = DiscourseParameters {
   _discourseHost :: IP
