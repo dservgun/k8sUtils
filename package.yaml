@@ -8,7 +8,9 @@ license: AllRightsReserved
 
 library:
   source-dirs : lib
-
+  ghc-options : 
+    - -Wall
+    - -freverse-errors
 
 executables:
   simple:

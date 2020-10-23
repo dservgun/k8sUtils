@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-19 21:30:42
+-- @Last Modified time: 2020-10-22 23:32:22
 
 {-|
   -- TODO : Add comments for each attribute.
@@ -55,11 +55,11 @@ data DiscourseParameters = DiscourseParameters {
   , _discourseSecurityContext :: V1SecurityContext
   , _discourseResources :: [V1ResourceRequirements]
   , _discourseLivenessProbe :: ProbeParameters
-  , _discoruseReadinessProbe :: ProbeParameters
+  , _discourseReadinessProbe :: ProbeParameters
   , _discourseCustomLivenessProbe :: ProbeParameters
   , _discourseCustomReadinessProbe :: ProbeParameters
   , _discourseExtraEnvironmentVariables :: Set EnvironmentVariable
-  , _discourseExtraEnvVarsConfigMaps :: V1ConfigMap
+  , _discourseExtraEnvVarsConfigMap :: V1ConfigMap
   , _discourseExtraVolumeMounts :: Set V1PersistentVolume
   , _discourseSkipInstall :: Bool
 }
@@ -72,3 +72,76 @@ discourseHost =
 discourseFullName :: Lens' DiscourseParameters DiscourseFullName
 discourseFullName =
   lens _discourseFullName (\discourseParameters' fullName' -> discourseParameters' {_discourseFullName = fullName'})
+
+discourseSiteName :: Lens' DiscourseParameters SiteName
+discourseSiteName =
+  lens _discourseSiteName (\discourseParameters' siteName' -> discourseParameters' {_discourseSiteName = siteName'})
+
+discourseUserName :: Lens' DiscourseParameters UserName
+discourseUserName =
+  lens _discourseUserName (\discourseParameters' userName' -> discourseParameters' {_discourseUserName = userName'})
+
+discoursePassword :: Lens' DiscourseParameters Password
+discoursePassword =
+  lens _discoursePassword (\discourseParameters' password' -> discourseParameters' {_discoursePassword = password'})
+
+discourseExistingSecret :: Lens' DiscourseParameters V1Secret
+discourseExistingSecret =
+  lens _discourseExistingSecret (\discourseParameters' secret' -> discourseParameters' {_discourseExistingSecret = secret'})
+
+discourseEmail :: Lens' DiscourseParameters Email
+discourseEmail =
+  lens _discourseEmail (\discourseParameters' email' -> discourseParameters' {_discourseEmail = email'})
+
+discourseCommand :: Lens' DiscourseParameters CustomCommand
+discourseCommand =
+  lens _discourseCommand (\discourseParameters' command' -> discourseParameters' {_discourseCommand = command'})
+
+discourseArgs :: Lens' DiscourseParameters [Argument]
+discourseArgs =
+  lens _discourseArgs (\discourseParameters' args' -> discourseParameters' {_discourseArgs = args'})
+
+discourseSecurityContext :: Lens' DiscourseParameters V1SecurityContext
+discourseSecurityContext =
+  lens _discourseSecurityContext (\discourseParameters' secContext' -> discourseParameters' {_discourseSecurityContext = secContext'})
+
+discourseResources :: Lens' DiscourseParameters [V1ResourceRequirements]
+discourseResources =
+  lens _discourseResources (\discourseParameters' resources' -> discourseParameters' {_discourseResources = resources'})
+
+discourseLivenessProbe :: Lens' DiscourseParameters ProbeParameters
+discourseLivenessProbe =
+  lens _discourseLivenessProbe (\discourseParameters' probe' -> discourseParameters' {_discourseLivenessProbe = probe'})
+
+discourseReadinessProbe :: Lens' DiscourseParameters ProbeParameters
+discourseReadinessProbe = 
+  lens _discourseReadinessProbe (\discourseParameters' probe' -> discourseParameters' {_discourseReadinessProbe = probe'})
+
+discourseCustomLivenessProbe :: Lens' DiscourseParameters ProbeParameters
+discourseCustomLivenessProbe =
+  lens _discourseCustomReadinessProbe (\discourseParameters' probe' -> discourseParameters' {_discourseCustomReadinessProbe = probe'})
+
+discourseExtraEnvironmentVariables :: Lens' DiscourseParameters (Set EnvironmentVariable)
+discourseExtraEnvironmentVariables =
+  lens _discourseExtraEnvironmentVariables (\discourseParameters' env' -> discourseParameters' {_discourseExtraEnvironmentVariables = env'})
+
+discourseExtraEnvVarsConfigMap :: Lens' DiscourseParameters V1ConfigMap
+discourseExtraEnvVarsConfigMap =
+  lens _discourseExtraEnvVarsConfigMap
+    (\discourseParameters' configMap' -> discourseParameters' {_discourseExtraEnvVarsConfigMap = configMap'})
+
+discourseExtraVolumeMounts :: Lens' DiscourseParameters (Set V1PersistentVolume)
+discourseExtraVolumeMounts =
+  lens _discourseExtraVolumeMounts 
+    (\discourseParameters' mounts' -> discourseParameters' {_discourseExtraVolumeMounts = mounts'})
+
+discourseSkipInstall :: Lens' DiscourseParameters Bool
+discourseSkipInstall =
+  lens _discourseSkipInstall 
+    (\discourseParameters' skip' -> discourseParameters' {_discourseSkipInstall = skip'})
+
+
+
+
+
+
