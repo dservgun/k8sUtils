@@ -2,17 +2,17 @@
 -- @Date:   2020-10-17 18:46:10
 -- @Last Modified by:   dinkar
 -- @Last Modified time: 2020-10-22 23:34:11
-{-# language OverloadedStrings #-}
-{-# language InstanceSigs      #-}
+{-# LANGUAGE InstanceSigs      #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Discourse.ConfigMap where
 
-import CommonTypes
-import Data.Coerce
-import Data.Map as Map
-import Kubernetes.OpenAPI
-import Lens.Micro
-import Discourse.DiscourseConfiguration
+import           CommonTypes
+import           Data.Coerce
+import           Data.Map                         as Map
+import           Discourse.DiscourseConfiguration
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 
   -- POSTGRESQL_HOST: postgresql
   -- POSTGRESQL_ROOT_USER: postgres
@@ -47,4 +47,4 @@ makeConfig discourseParameters =
     v1ConfigMapMetadataL .~ (Just mkV1ObjectMeta) &
     v1ConfigMapMetadataL . _Just . v1ObjectMetaNameL .~ (Just . coerce $ discourseParameters ^. discourseFullName) &
     v1ConfigMapDataL .~ (Just $ Map.fromList [])
-    
+

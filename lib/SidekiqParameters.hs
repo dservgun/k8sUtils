@@ -4,24 +4,24 @@
 -- @Last Modified time: 2020-10-19 15:56:51
 module SidekiqParameters where
 
-import Lens.Micro
-import CommonTypes
-import ProbeParameters
-import Data.Set
-import Kubernetes.OpenAPI
+import           CommonTypes
+import           Data.Set
+import           Kubernetes.OpenAPI
+import           Lens.Micro
+import           ProbeParameters
 
 
 data SidekiqParameters = SidekiqParameters {
-  _sidekiqSecurityContext :: V1SecurityContext
-  , _sidekiqCommand :: CustomCommand
-  , _sidekiqArgs :: [Argument]
-  , _sidekiqResources :: [V1ResourceRequirements]
-  , _sidekiqLivenessProbe :: LivenessProbe
-  , _sidekiqReadinessProbe :: ReadinessProbe
+  _sidekiqSecurityContext             :: V1SecurityContext
+  , _sidekiqCommand                   :: CustomCommand
+  , _sidekiqArgs                      :: [Argument]
+  , _sidekiqResources                 :: [V1ResourceRequirements]
+  , _sidekiqLivenessProbe             :: LivenessProbe
+  , _sidekiqReadinessProbe            :: ReadinessProbe
   , _sidekiqExtraEnvironmentVariables :: Set EnvironmentVariable
-  , _sidekiqExtraEnvVarsConfigMaps :: V1ConfigMap
-  , _sidekiqExtraEnvVarsSecret :: V1Secret
-  , _sidekiqExtraVolumeMounts :: Set V1PersistentVolume
+  , _sidekiqExtraEnvVarsConfigMaps    :: V1ConfigMap
+  , _sidekiqExtraEnvVarsSecret        :: V1Secret
+  , _sidekiqExtraVolumeMounts         :: Set V1PersistentVolume
 }
 
 sidekiqSecurityContext :: Lens' SidekiqParameters V1SecurityContext

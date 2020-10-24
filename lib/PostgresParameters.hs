@@ -1,17 +1,17 @@
 module PostgresParameters where
 
-import Lens.Micro
-import CommonTypes
-import Kubernetes.OpenAPI
-import ExternalDBParameters
+import           CommonTypes
+import           ExternalDBParameters
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 
 data PostgresParameters = PostgresParameters {
-  _postgresEnabled :: Bool
-  , _postgresqlUserName :: UserName
-  , _postgressqlPassword :: Password
+  _postgresEnabled               :: Bool
+  , _postgresqlUserName          :: UserName
+  , _postgressqlPassword         :: Password
   , _postgressqlPostgresPassword :: Password
-  , _postgresqlExistingSecret :: V1Secret
-  , _postgresqlDatabaseName :: DatabaseName
+  , _postgresqlExistingSecret    :: V1Secret
+  , _postgresqlDatabaseName      :: DatabaseName
   , _postgresqlPersistencEnabled :: Bool
-  , _externalDBParameters :: ExternalDBParameters
+  , _externalDBParameters        :: ExternalDBParameters
 }

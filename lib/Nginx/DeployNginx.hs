@@ -1,6 +1,6 @@
-{-# language OverloadedStrings #-}
-{-# language DerivingVia       #-}
-{-# language InstanceSigs      #-}
+{-# LANGUAGE DerivingVia       #-}
+{-# LANGUAGE InstanceSigs      #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 -- @Author: dinkar
 -- @Date:   2020-10-11 21:34:32
@@ -14,18 +14,18 @@ module Nginx.DeployNginx
   )
 where
 
-import CommonTypes
-import DeploymentParameters
-import Data.Coerce
-import Data.Default
-import Data.Map
-import Data.Text
-import Kubernetes.Client
-import Kubernetes.OpenAPI
-import Kubernetes.OpenAPI.API.AppsV1
-import Kubernetes.OpenAPI.API.CoreV1
-import Lens.Micro
-import GHC.Natural
+import           CommonTypes
+import           Data.Coerce
+import           Data.Default
+import           Data.Map
+import           Data.Text
+import           DeploymentParameters
+import           GHC.Natural
+import           Kubernetes.Client
+import           Kubernetes.OpenAPI
+import           Kubernetes.OpenAPI.API.AppsV1
+import           Kubernetes.OpenAPI.API.CoreV1
+import           Lens.Micro
 
 {--
 
@@ -52,12 +52,12 @@ spec:
 
 
 data NginxParameters = NginxParameters {
-  _apiVersion :: APIVersion
-  , _namespace :: Namespace
-  , _metadataName :: Name
-  , _appName :: AppName
-  , _replicas :: ReplicaCount
-  , _nginxImage :: DockerImage
+  _apiVersion      :: APIVersion
+  , _namespace     :: Namespace
+  , _metadataName  :: Name
+  , _appName       :: AppName
+  , _replicas      :: ReplicaCount
+  , _nginxImage    :: DockerImage
   , _containerPort :: ContainerPort
 } deriving (Show)
 
@@ -113,7 +113,7 @@ makeDeployment nginxParams =
     v1DeploymentSpecL . _Just . v1DeploymentSpecSelectorL . v1LabelSelectorMatchLabelsL .~ (Just $ fromList [("app", coerce $ nginxParams ^. appName)]) &
     v1DeploymentSpecL . _Just . v1DeploymentSpecReplicasL .~ (Just . naturalToInt . coerce $ nginxParams ^. replicas) &
     v1DeploymentSpecL . _Just . v1DeploymentSpecTemplateL . v1PodTemplateSpecSpecL .~ (Just $ mkV1PodSpec [mkV1Container "nginx"]) &
-    v1DeploymentSpecL . _Just . v1DeploymentSpecTemplateL . v1PodTemplateSpecSpecL . _Just . v1PodSpecContainersL .~ 
+    v1DeploymentSpecL . _Just . v1DeploymentSpecTemplateL . v1PodTemplateSpecSpecL . _Just . v1PodSpecContainersL .~
       [
         mkV1Container "nginx" &
           v1ContainerNameL .~ (coerce $ nginxParams ^. appName) &

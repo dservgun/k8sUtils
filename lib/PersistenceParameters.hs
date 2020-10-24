@@ -1,15 +1,15 @@
 module PersistenceParameters where
 
-import Kubernetes.OpenAPI
-import CommonTypes
-import Lens.Micro
+import           CommonTypes
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 
 data PersistenceParameters = PersistenceParameters {
-  _persistenceEnabled :: Bool
-  , _persistenceStorageClass :: V1StorageClass
+  _persistenceEnabled         :: Bool
+  , _persistenceStorageClass  :: V1StorageClass
   , _persistenceExistingClaim :: V1PersistentVolumeClaim
-  , _persistenceAccessMode :: StorageAccessMode
-  , _persistenceSize :: Quantity
+  , _persistenceAccessMode    :: StorageAccessMode
+  , _persistenceSize          :: Quantity
 }
 
 persistenceEnabled :: Lens' PersistenceParameters Bool

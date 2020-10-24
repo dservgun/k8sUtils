@@ -1,7 +1,7 @@
-{-# language DerivingVia #-}
+{-# LANGUAGE DerivingVia #-}
 module ImageTypes where
 
-import Data.Text
+import           Data.Text
 
 newtype DockerImageRegistry = DockerImageRegistry Text
   deriving Show via Text

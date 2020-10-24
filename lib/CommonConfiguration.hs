@@ -1,38 +1,38 @@
 module CommonConfiguration where
 
-import Lens.Micro
-import CommonTypes
-import ImageTypes
-import PersistenceParameters
-import Kubernetes.OpenAPI
-import Data.Set
+import           CommonTypes
+import           Data.Set
+import           ImageTypes
+import           Kubernetes.OpenAPI
+import           Lens.Micro
+import           PersistenceParameters
 
-data CommonConfiguration = 
+data CommonConfiguration =
   CommonConfiguration {
-    _replicaCount :: ReplicaCount
-    , _imageRegistry :: DockerImageRegistry
-    , _imageRepository :: DockerImageRepository
-    , _imageTag :: ImageTag
-    , _imagePullPolicy :: ImagePullPolicy
-    , _imageDebug :: Bool
-    , _imagePullSecrets :: DockerImagePullSecrets
-    , _nameOverride :: NameOverride
-    , _fullNameOverride :: NameOverride
-    , _extraVolumes :: [V1VolumeMount]
-    , _sidecarContainers :: [SidecarContainer]
-    , _initContainers :: [V1Container]
-    , _serviceAccount :: ServiceAccountName
-    , _createServiceAccount :: Bool
-    , _podSecurityContext :: V1PodSecurityContext -- Use some sensible defaults.
-    , _updateStrategy :: UpdateStrategy
-    , _podAnnotations :: Set Annotation
-    , _podLabels :: Set Label
-    , _commonAnnotations :: Set Annotation
-    , _commonLabels :: Set Label
+    _replicaCount            :: ReplicaCount
+    , _imageRegistry         :: DockerImageRegistry
+    , _imageRepository       :: DockerImageRepository
+    , _imageTag              :: ImageTag
+    , _imagePullPolicy       :: ImagePullPolicy
+    , _imageDebug            :: Bool
+    , _imagePullSecrets      :: DockerImagePullSecrets
+    , _nameOverride          :: NameOverride
+    , _fullNameOverride      :: NameOverride
+    , _extraVolumes          :: [V1VolumeMount]
+    , _sidecarContainers     :: [SidecarContainer]
+    , _initContainers        :: [V1Container]
+    , _serviceAccount        :: ServiceAccountName
+    , _createServiceAccount  :: Bool
+    , _podSecurityContext    :: V1PodSecurityContext -- Use some sensible defaults.
+    , _updateStrategy        :: UpdateStrategy
+    , _podAnnotations        :: Set Annotation
+    , _podLabels             :: Set Label
+    , _commonAnnotations     :: Set Annotation
+    , _commonLabels          :: Set Label
     , _persistenceParameters :: PersistenceParameters
-    , _podAffinity :: V1Affinity
-    , _nodeSelector :: Set Label -- Node labels for pod assignment.
-    , _tolerations :: Set V1Toleration
+    , _podAffinity           :: V1Affinity
+    , _nodeSelector          :: Set Label -- Node labels for pod assignment.
+    , _tolerations           :: Set V1Toleration
   }
 
 

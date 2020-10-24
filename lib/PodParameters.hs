@@ -1,12 +1,12 @@
-{-# language OverloadedStrings #-}
-{-# language DerivingVia       #-}
-{-# language RankNTypes        #-}
+{-# LANGUAGE DerivingVia       #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes        #-}
 
 module PodParameters where
 
-import CommonTypes
-import Kubernetes.OpenAPI
-import Lens.Micro
+import           CommonTypes
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 
 -- TODO: This is not as general as the pods specification.
 -- We are probably using just as much convenience as we can get.

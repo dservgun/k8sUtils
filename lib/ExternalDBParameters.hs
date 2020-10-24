@@ -1,18 +1,18 @@
 module ExternalDBParameters where
 
-import CommonTypes
-import Lens.Micro
-import Kubernetes.OpenAPI
+import           CommonTypes
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 
 data ExternalDBParameters = ExternalDBParameters {
-  _hostName :: HostName
-  , _portNumber :: Port
-  , _externalUserName :: UserName
-  , _externalPassword :: Password
-  , _externalPostgresUser :: UserName
-  , _externalPostgresPassword :: Password
+  _hostName                         :: HostName
+  , _portNumber                     :: Port
+  , _externalUserName               :: UserName
+  , _externalPassword               :: Password
+  , _externalPostgresUser           :: UserName
+  , _externalPostgresPassword       :: Password
   , _externalPostgresExistingSecret :: V1Secret
-  , _externalDatabase :: DatabaseName
+  , _externalDatabase               :: DatabaseName
 }
 
 hostName :: Lens' ExternalDBParameters HostName

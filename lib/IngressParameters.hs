@@ -5,29 +5,29 @@
 
 module IngressParameters where
 
-import Lens.Micro
-import Data.Set
-import CommonTypes
-import Kubernetes.OpenAPI
-import Data.Map
+import           CommonTypes
+import           Data.Map
+import           Data.Set
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 
 data IngressParameters = IngressParameters {
-  _ingressEnabled :: Bool
+  _ingressEnabled              :: Bool
   , _ingressCertificateManager :: Set Annotation -- TODO: What is the annotation here?
-  , _ingressHostName :: HostName
-  , _ingressTLS :: Bool
-  , _ingressAnnotation :: Set Annotation
-  , _ingressExtraHosts :: Map Host (Maybe V1Secret)
+  , _ingressHostName           :: HostName
+  , _ingressTLS                :: Bool
+  , _ingressAnnotation         :: Set Annotation
+  , _ingressExtraHosts         :: Map Host (Maybe V1Secret)
 }
 
 ingressEnabled :: Lens' IngressParameters Bool
 ingressEnabled =
-  lens _ingressEnabled 
+  lens _ingressEnabled
     (\ingressParameters' enabled' -> ingressParameters' {_ingressEnabled = enabled'})
 
 ingressCertificateManager :: Lens' IngressParameters (Set Annotation)
 ingressCertificateManager =
-  lens _ingressCertificateManager 
+  lens _ingressCertificateManager
     (\ingressParameters' cert' -> ingressParameters' {_ingressCertificateManager = cert'})
 
 ingressHostName :: Lens' IngressParameters HostName

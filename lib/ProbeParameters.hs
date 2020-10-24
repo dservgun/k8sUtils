@@ -4,18 +4,18 @@
 -- @Last Modified time: 2020-10-19 15:47:00
 module ProbeParameters where
 
-import Numeric.Natural
-import Lens.Micro
+import           Lens.Micro
+import           Numeric.Natural
 
 type LivenessProbe = ProbeParameters
 type ReadinessProbe = ProbeParameters
 data ProbeParameters = ProbeParameters {
-    _probeEnabled :: Bool
+    _probeEnabled               :: Bool
     , _probeInitialDelaySeconds :: Natural
-    , _probePeriodSeconds :: Natural
-    , _probeTimeoutSeconds :: Natural
-    , _probeFailureThreshold :: Natural
-    , _probeSuccessThreshold :: Natural
+    , _probePeriodSeconds       :: Natural
+    , _probeTimeoutSeconds      :: Natural
+    , _probeFailureThreshold    :: Natural
+    , _probeSuccessThreshold    :: Natural
 }
 
 probeEnabled :: Lens' ProbeParameters Bool

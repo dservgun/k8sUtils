@@ -1,6 +1,6 @@
-{-# language OverloadedStrings #-}
-{-# language DerivingVia       #-}
-{-# language RankNTypes        #-}
+{-# LANGUAGE DerivingVia       #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes        #-}
 
 -- @Author: dinkar
 -- @Date:   2020-10-11 23:23:38
@@ -8,12 +8,12 @@
 -- @Last Modified time: 2020-10-18 10:33:44
 module CommonTypes where
 
-import Data.Text
-import Data.Default
-import Numeric.Natural
-import Kubernetes.Client
-import Kubernetes.OpenAPI
-import Lens.Micro
+import           Data.Default
+import           Data.Text
+import           Kubernetes.Client
+import           Kubernetes.OpenAPI
+import           Lens.Micro
+import           Numeric.Natural
 
 newtype AppName = AppName Text
   deriving Show via Text
@@ -36,7 +36,7 @@ newtype DockerImage = DockerImage Text
   deriving Read via Text
 
 newtype ContainerPort = ContainerPort Natural
-  deriving Show via Natural 
+  deriving Show via Natural
   deriving Read via Natural
 
 data RestartPolicy = OnFailure | Never deriving (Show)
@@ -44,7 +44,7 @@ data GPUVendor = AMD | NVIDIA
 data StorageAccessMode = RWO | ROX | RWX deriving (Show)
 
 instance Show GPUVendor where
-  show AMD = "amd"
+  show AMD    = "amd"
   show NVIDIA = "nvidia"
 
 

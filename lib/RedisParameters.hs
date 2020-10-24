@@ -1,20 +1,20 @@
 module RedisParameters where
 
-import Kubernetes.OpenAPI
-import CommonTypes
-import Lens.Micro
+import           CommonTypes
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 data RedisParameters = RedisParameters {
-  _redisEnabled :: Bool
-  , _redisUsePassword :: Bool
-  , _redisPassword :: Password
-  , _redisExistingSecret :: V1Secret
-  , _redisExistingSecretPasswordKey :: K8sKey
-  , _redisClusterEnabled :: Bool
-  , _redisClusterMasterPersistenceEnabled :: Bool
-  , _externalRedisHost :: HostName
-  , _externalRedisPortNumber :: Port
-  , _externalRedisPassword :: Password
-  , _externalRedisExistingSecret :: V1Secret
+  _redisEnabled                             :: Bool
+  , _redisUsePassword                       :: Bool
+  , _redisPassword                          :: Password
+  , _redisExistingSecret                    :: V1Secret
+  , _redisExistingSecretPasswordKey         :: K8sKey
+  , _redisClusterEnabled                    :: Bool
+  , _redisClusterMasterPersistenceEnabled   :: Bool
+  , _externalRedisHost                      :: HostName
+  , _externalRedisPortNumber                :: Port
+  , _externalRedisPassword                  :: Password
+  , _externalRedisExistingSecret            :: V1Secret
   , _externalRedisExistingSecretPasswordKey :: K8sKey
 }
 

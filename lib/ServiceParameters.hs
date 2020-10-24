@@ -1,21 +1,21 @@
 module ServiceParameters where
 
-import CommonTypes
-import Data.IP
-import Data.Set
-import Kubernetes.OpenAPI
-import Lens.Micro
+import           CommonTypes
+import           Data.IP
+import           Data.Set
+import           Kubernetes.OpenAPI
+import           Lens.Micro
 
 data ServiceParameters = ServiceParameters {
-  _serviceType :: CustomServiceType
-  , _servicePort :: Port
-  , _serviceNodePort :: Port
-  , _serviceLoadBalancerIP :: IP
-  , _serviceExternalTrafficPolicy :: ExternalTrafficPolicy
-  , _serviceAnnotations :: Set Annotation
+  _serviceType                       :: CustomServiceType
+  , _servicePort                     :: Port
+  , _serviceNodePort                 :: Port
+  , _serviceLoadBalancerIP           :: IP
+  , _serviceExternalTrafficPolicy    :: ExternalTrafficPolicy
+  , _serviceAnnotations              :: Set Annotation
   , _serviceLoadBalancerSourceRanges :: Set LoadBalancerSourceRange
-  , _serviceExtraPorts :: [Port]
-  , _serviceHttpPort :: Port
+  , _serviceExtraPorts               :: [Port]
+  , _serviceHttpPort                 :: Port
 }
 
 serviceType :: Lens' ServiceParameters CustomServiceType
@@ -53,4 +53,4 @@ serviceExtraPorts =
 serviceHttpPort :: Lens' ServiceParameters Port
 serviceHttpPort =
   lens _serviceHttpPort (\serviceParameters' port' -> serviceParameters' {_serviceHttpPort = port'})
-  
+

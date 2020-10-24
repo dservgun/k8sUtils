@@ -1,6 +1,6 @@
-{-# language OverloadedStrings #-}
-{-# language DerivingVia       #-}
-{-# language InstanceSigs      #-}
+{-# LANGUAGE DerivingVia       #-}
+{-# LANGUAGE InstanceSigs      #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
@@ -15,53 +15,53 @@
 
 module Discourse.DiscourseConfiguration where
 
-import Data.Set
-import Data.Map
-import Data.Text
-import Numeric.Natural
-import Kubernetes.OpenAPI
-import Lens.Micro
-import CommonTypes
-import CommonConfiguration
-import RedisParameters
-import ProbeParameters
-import SidekiqParameters
-import PostgresParameters
-import ExternalDBParameters
-import ServiceParameters
-import ImageTypes
-import Data.IP
+import           CommonConfiguration
+import           CommonTypes
+import           Data.IP
+import           Data.Map
+import           Data.Set
+import           Data.Text
+import           ExternalDBParameters
+import           ImageTypes
+import           Kubernetes.OpenAPI
+import           Lens.Micro
+import           Numeric.Natural
+import           PostgresParameters
+import           ProbeParameters
+import           RedisParameters
+import           ServiceParameters
+import           SidekiqParameters
 
 type DiscourseFullName = DNSLabelName
 
-data GlobalConfiguration = 
+data GlobalConfiguration =
   GlobalConfiguration {
-    _globalImageRegistry :: DockerImageRegistry
+    _globalImageRegistry      :: DockerImageRegistry
     , _globalImagePullSecrets :: DockerImagePullSecrets
-    , _storageClass :: StorageClass
+    , _storageClass           :: StorageClass
   }
 
 
 data DiscourseParameters = DiscourseParameters {
-  _discourseHost :: IP
-  , _discourseFullName :: DiscourseFullName
-  , _discourseSiteName :: SiteName
-  , _discourseUserName :: UserName
-  , _discoursePassword :: Password
-  , _discourseExistingSecret :: V1Secret
-  , _discourseEmail :: Email
-  , _discourseCommand :: CustomCommand -- Custom command to override the image command.
-  , _discourseArgs :: [Argument]
-  , _discourseSecurityContext :: V1SecurityContext
-  , _discourseResources :: [V1ResourceRequirements]
-  , _discourseLivenessProbe :: ProbeParameters
-  , _discourseReadinessProbe :: ProbeParameters
-  , _discourseCustomLivenessProbe :: ProbeParameters
-  , _discourseCustomReadinessProbe :: ProbeParameters
+  _discourseHost                        :: IP
+  , _discourseFullName                  :: DiscourseFullName
+  , _discourseSiteName                  :: SiteName
+  , _discourseUserName                  :: UserName
+  , _discoursePassword                  :: Password
+  , _discourseExistingSecret            :: V1Secret
+  , _discourseEmail                     :: Email
+  , _discourseCommand                   :: CustomCommand -- Custom command to override the image command.
+  , _discourseArgs                      :: [Argument]
+  , _discourseSecurityContext           :: V1SecurityContext
+  , _discourseResources                 :: [V1ResourceRequirements]
+  , _discourseLivenessProbe             :: ProbeParameters
+  , _discourseReadinessProbe            :: ProbeParameters
+  , _discourseCustomLivenessProbe       :: ProbeParameters
+  , _discourseCustomReadinessProbe      :: ProbeParameters
   , _discourseExtraEnvironmentVariables :: Set EnvironmentVariable
-  , _discourseExtraEnvVarsConfigMap :: V1ConfigMap
-  , _discourseExtraVolumeMounts :: Set V1PersistentVolume
-  , _discourseSkipInstall :: Bool
+  , _discourseExtraEnvVarsConfigMap     :: V1ConfigMap
+  , _discourseExtraVolumeMounts         :: Set V1PersistentVolume
+  , _discourseSkipInstall               :: Bool
 }
 
 
@@ -114,7 +114,7 @@ discourseLivenessProbe =
   lens _discourseLivenessProbe (\discourseParameters' probe' -> discourseParameters' {_discourseLivenessProbe = probe'})
 
 discourseReadinessProbe :: Lens' DiscourseParameters ProbeParameters
-discourseReadinessProbe = 
+discourseReadinessProbe =
   lens _discourseReadinessProbe (\discourseParameters' probe' -> discourseParameters' {_discourseReadinessProbe = probe'})
 
 discourseCustomLivenessProbe :: Lens' DiscourseParameters ProbeParameters
@@ -132,12 +132,12 @@ discourseExtraEnvVarsConfigMap =
 
 discourseExtraVolumeMounts :: Lens' DiscourseParameters (Set V1PersistentVolume)
 discourseExtraVolumeMounts =
-  lens _discourseExtraVolumeMounts 
+  lens _discourseExtraVolumeMounts
     (\discourseParameters' mounts' -> discourseParameters' {_discourseExtraVolumeMounts = mounts'})
 
 discourseSkipInstall :: Lens' DiscourseParameters Bool
 discourseSkipInstall =
-  lens _discourseSkipInstall 
+  lens _discourseSkipInstall
     (\discourseParameters' skip' -> discourseParameters' {_discourseSkipInstall = skip'})
 
 

@@ -1,20 +1,20 @@
-{-# language OverloadedStrings #-}
-{-# language InstanceSigs      #-}
+{-# LANGUAGE InstanceSigs      #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module GPU.DeployGPU where
 
-import CommonTypes
-import PodParameters
-import Data.Coerce
-import Data.Default
-import Data.Map
-import Data.Text as Text
-import Kubernetes.Client
-import Kubernetes.OpenAPI
-import Kubernetes.OpenAPI.API.AppsV1
-import Kubernetes.OpenAPI.API.CoreV1
-import Lens.Micro
-import GHC.Natural
+import           CommonTypes
+import           Data.Coerce
+import           Data.Default
+import           Data.Map
+import           Data.Text                     as Text
+import           GHC.Natural
+import           Kubernetes.Client
+import           Kubernetes.OpenAPI
+import           Kubernetes.OpenAPI.API.AppsV1
+import           Kubernetes.OpenAPI.API.CoreV1
+import           Lens.Micro
+import           PodParameters
 
 
 {-
@@ -35,14 +35,14 @@ spec:
 -}
 
 data GPUParameters = GPUParameters {
-  _apiVersion :: APIVersion
-  , _namespace :: Namespace
-  , _metadataName :: Name
-  , _podName :: PodName
+  _apiVersion      :: APIVersion
+  , _namespace     :: Namespace
+  , _metadataName  :: Name
+  , _podName       :: PodName
   , _restartPolicy :: RestartPolicy
-  , _cudaImage :: DockerImage
-  , _vendor :: GPUVendor
-  , _quantity :: Int
+  , _cudaImage     :: DockerImage
+  , _vendor        :: GPUVendor
+  , _quantity      :: Int
   }
 
 instance Default GPUParameters where
@@ -96,14 +96,14 @@ makePod gpuParameters' =
     v1PodMetadataL . _Just . v1ObjectMetaNameL .~ (Just . coerce $ gpuParameters' ^. podName) &
     v1PodSpecL .~ (Just $ mkV1PodSpec []) &
     v1PodSpecL . _Just . v1PodSpecRestartPolicyL .~ (Just $ Text.pack . show $ gpuParameters' ^. restartPolicy) &
-    v1PodSpecL . _Just . v1PodSpecContainersL .~ 
+    v1PodSpecL . _Just . v1PodSpecContainersL .~
         [
           mkV1Container (coerce $ gpuParameters' ^. podName) &
             v1ContainerImageL .~ (Just . coerce $ gpuParameters' ^. podImage) &
             v1ContainerResourcesL .~ (Just mkV1ResourceRequirements) &
-            v1ContainerResourcesL . _Just . v1ResourceRequirementsLimitsL .~ 
+            v1ContainerResourcesL . _Just . v1ResourceRequirementsLimitsL .~
               ( -- TODO: this can get a bit hairy here.
-                Just $ fromList 
+                Just $ fromList
                   [
                     ( ((show $ gpuParameters' ^. gpuVendor) <> ".com/gpu"), Quantity . Text.pack . show $ gpuParameters' ^. gpuQuantity)
                   ]
