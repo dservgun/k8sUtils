@@ -1,0 +1,5 @@
+# Simple ide setup
+tmux new-session -s k8s_util -d
+tmux split-window -v -t k8s_util
+tmux send-keys -t k8s_util:1.1 
+tmux attach -t k8s_util
