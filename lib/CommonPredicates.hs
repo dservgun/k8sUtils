@@ -1,7 +1,8 @@
+{-# LANGUAGE OverloadedStrings #-}
 -- @Author: dinkar
 -- @Date:   2020-10-18 09:14:02
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-18 22:59:25
+-- @Last Modified time: 2020-11-06 22:48:07
 
 module CommonPredicates where
 
@@ -35,3 +36,30 @@ isValidFailureThreshold = Predicate (\a -> a >= 1 && a < 30)
 isValidSuccessThreshold :: Predicate Natural
 isValidSuccessThreshold = Predicate (\a -> a >= 1 && a < 30)
 
+
+isValidConfigurationKind :: Predicate ConfigurationKind
+isValidConfigurationKind =
+  Predicate (\a -> validConfiguration . coerce $ a)
+  where
+    validConfiguration :: Text -> Bool
+    validConfiguration a
+      | a == "Deployment" = True
+      | a == "Pod" = True
+      | a == "PersistentVolumeClaim" = True
+      | otherwise = False
+
+{-|
+  * Guaranteed
+  * Burstable
+  * BestEffort
+-}
+isValidQOS :: Predicate QOS
+isValidQOS =
+  Predicate $ validQOS . coerce
+  where
+    validQOS :: Text -> Bool
+    validQOS qos
+      | qos == "Guaranteed" = True
+      | qos == "Burstable" = True
+      | qos == "BestEffort" = True
+      | otherwise = False

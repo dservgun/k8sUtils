@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 21:34:32
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-16 15:13:17
+-- @Last Modified time: 2020-11-06 21:32:53
 
 module Nginx.DeployNginx
   (
@@ -52,19 +52,21 @@ spec:
 
 
 data NginxParameters = NginxParameters {
-  _apiVersion      :: APIVersion
-  , _namespace     :: Namespace
-  , _metadataName  :: Name
-  , _appName       :: AppName
-  , _replicas      :: ReplicaCount
-  , _nginxImage    :: DockerImage
-  , _containerPort :: ContainerPort
+  _apiVersion       :: APIVersion
+  , _deploymentKind :: ConfigurationKind
+  , _namespace      :: Namespace
+  , _metadataName   :: Name
+  , _appName        :: AppName
+  , _replicas       :: ReplicaCount
+  , _nginxImage     :: DockerImage
+  , _containerPort  :: ContainerPort
 } deriving (Show)
 
 instance Default NginxParameters where
   def =
     NginxParameters
       (APIVersion "apps/v1")
+      (ConfigurationKind "deployment")
       (Namespace "default")
       (Name "nginx-deployment")
       (AppName "nginx")
@@ -101,6 +103,9 @@ instance DeploymentParameters NginxParameters where
   containerPort =
     lens _containerPort (\nginxParameters' containerPort' -> nginxParameters' {_containerPort = containerPort'})
 
+  deploymentKind :: Lens' NginxParameters ConfigurationKind
+  deploymentKind =
+    lens _deploymentKind (\nginxParameters' configurationKind' -> nginxParameters' {_deploymentKind = configurationKind'})
 
 makeDeployment :: NginxParameters -> V1Deployment
 makeDeployment nginxParams =

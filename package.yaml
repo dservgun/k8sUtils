@@ -25,14 +25,14 @@ tests:
     source-dirs: tests
     main: Main.hs
     dependencies:
-      - k8s-util
+      - base
       - hedgehog
       - hedgehog-quickcheck
-      - base
+      - k8s-util
       - tasty
       - tasty-discover
-      - tasty-hunit
       - tasty-hspec
+      - tasty-hunit
 
 dependencies:
 - base
@@ -47,3 +47,4 @@ dependencies:
 - safe-exceptions
 - stm
 - text
+- wreq

@@ -5,7 +5,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-11 23:23:38
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-18 10:33:44
+-- @Last Modified time: 2020-11-06 21:39:09
 module CommonTypes where
 
 import           Data.Default
@@ -157,4 +157,15 @@ newtype HostPath = HostPath Text
 newtype Host = Host (HostName, HostPath)
   deriving (Show, Read)
 
+newtype ConfigurationKind = ConfigurationKind Text
+  deriving Show via Text
+  deriving Read via Text
 
+{-|
+  Guaranteed
+  Burstable
+  BestEffort
+-}
+newtype QOS = QOS Text
+  deriving Show via Text
+  deriving Read via Text

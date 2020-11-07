@@ -1,25 +1,25 @@
-{-# LANGUAGE DerivingVia       #-}
-{-# LANGUAGE InstanceSigs      #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DerivingVia         #-}
+{-# LANGUAGE InstanceSigs        #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- @Author: dinkar
 -- @Date:   2020-10-16 15:14:04
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-22 23:32:22
+-- @Last Modified time: 2020-11-07 09:13:37
 
 {-|
-  -- TODO : Add comments for each attribute.
-  -- Using template haskell based lenses has issues
-  -- generating source documentation.
+
 -}
 
 module Discourse.DiscourseConfiguration where
 
 import           CommonConfiguration
 import           CommonTypes
+import           Data.Coerce
 import           Data.IP
-import           Data.Map
-import           Data.Set
+import           Data.Map             as Map
+import           Data.Set             as Set
 import           Data.Text
 import           ExternalDBParameters
 import           ImageTypes
@@ -43,7 +43,8 @@ data GlobalConfiguration =
 
 
 data DiscourseParameters = DiscourseParameters {
-  _discourseHost                        :: IP
+  _discourseInheritedParameters         :: CommonConfiguration
+  , _discourseHost                      :: IP
   , _discourseFullName                  :: DiscourseFullName
   , _discourseSiteName                  :: SiteName
   , _discourseUserName                  :: UserName
@@ -140,8 +141,14 @@ discourseSkipInstall =
   lens _discourseSkipInstall
     (\discourseParameters' skip' -> discourseParameters' {_discourseSkipInstall = skip'})
 
+discourseInheritedParameters :: Lens' DiscourseParameters CommonConfiguration
+discourseInheritedParameters =
+  lens _discourseInheritedParameters
+    (\discourseParameters' inheritedParameters' -> discourseParameters' {_discourseInheritedParameters = inheritedParameters'})
 
-
-
-
-
+makeLabelMap :: DiscourseParameters -> Map String Text
+makeLabelMap discourseParameters' =
+  let
+    labelSet = Set.toList $ discourseParameters' ^. discourseInheritedParameters ^. commonLabels
+  in
+    Map.fromList $ Prelude.zip (show <$> labelSet) (coerce <$> labelSet)
