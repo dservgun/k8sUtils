@@ -3,6 +3,13 @@
 ## Introduction
 A set of pods, deployments interacting with a kubernetes installation.
 
+## Inheritance
+Configurations need to support a form of inheritance so that each configuration can be modified independently. Within [k8sUtils](https://github.com/dservgun/k8sUtils) we borrow the concepts of inclusion and inheritance through composition. For example
+`haskell
+  For example, DiscourseConfiguration includes CommonConfiguration to use commonly defined labels, registry.
+
+`
+This approach does have its disadvantages and something we will revisit.
 ## Some conventions
 We like to flatten hierarchies unless needed. For example,
 
