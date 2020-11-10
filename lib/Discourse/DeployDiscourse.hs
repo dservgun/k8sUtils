@@ -4,7 +4,7 @@
 -- @Author: dinkar
 -- @Date:   2020-11-06 18:30:29
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-11-07 08:40:01
+-- @Last Modified time: 2020-11-10 18:14:39
 
 module Discourse.DeployDiscourse
   (
@@ -17,6 +17,7 @@ import           Data.Default
 import           Data.Map                         as Map
 import           Data.Text
 import           DeploymentParameters
+import           CommonConfiguration
 import           Discourse.DiscourseConfiguration
 import           GHC.Natural
 import           Kubernetes.Client
@@ -32,7 +33,10 @@ makeDeployment deploymentParameters' discourseConfiguration' =
     v1DeploymentKindL .~ (Just . coerce $ deploymentParameters' ^. DeploymentParameters.deploymentKind) &
     v1DeploymentMetadataL .~ (Just mkV1ObjectMeta) &
     v1DeploymentMetadataL . _Just . v1ObjectMetaNameL .~ (Just . coerce $ discourseConfiguration' ^. discourseFullName) &
-    v1DeploymentMetadataL . _Just . v1ObjectMetaLabelsL .~ (Just $ makeLabelMap discourseConfiguration')
+    v1DeploymentMetadataL . _Just . v1ObjectMetaLabelsL .~ (Just $ makeLabelMap discourseConfiguration') &
+    v1DeploymentSpecL .~ (Just $ mkV1DeploymentSpec mkV1LabelSelector mkV1PodTemplateSpec) &
+    v1DeploymentSpecL . _Just . v1DeploymentSpecReplicasL .~ 
+      (Just . naturalToInt . coerce $ discourseConfiguration' ^. discourseInheritedParameters ^. replicaCount)
 
 
 
