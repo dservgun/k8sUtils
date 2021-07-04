@@ -1,6 +1,10 @@
 module Main where
 
+import Config.ExternalDBConfiguration
 
 main :: IO ()
 main = do
-  print "A set of utilities to create pods and monitoring deployments etc. in Haskell"
+
+  dbParams <- loadExternalDBParameters "./configurations/externalDBParameters.config"
+  print dbParams
+  

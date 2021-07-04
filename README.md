@@ -80,3 +80,5 @@ makeDeployment nginxParams =
 ### Notes
 The code could be much simpler if we allowed for the entire lens machinery in this library. A lot of microlens boilerplate can be reduced. We are going to decide to using microlens till we really get tired of writing these boilerplate lens functions or perhaps write a generator that we can use.
 
+### References
+[How to add tracers](https://vadosware.io/post/better-k8s-monitoring-part-3-adding-tracing-with-opentracing-and-jaeger/)
