@@ -1,6 +1,10 @@
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 module ExternalDBParameters where
 
 import           CommonTypes
+import           GHC.Generics
 import           Kubernetes.OpenAPI
 import           Lens.Micro
 
@@ -11,9 +15,8 @@ data ExternalDBParameters = ExternalDBParameters {
   , _externalPassword               :: Password
   , _externalPostgresUser           :: UserName
   , _externalPostgresPassword       :: Password
-  , _externalPostgresExistingSecret :: V1Secret
   , _externalDatabase               :: DatabaseName
-}
+} deriving (Generic, Show)
 
 hostName :: Lens' ExternalDBParameters HostName
 hostName =
@@ -40,10 +43,6 @@ externalPostgresPassword :: Lens' ExternalDBParameters Password
 externalPostgresPassword =
   lens _externalPostgresPassword
     (\externalDBParameters' pwd' -> externalDBParameters' {_externalPostgresPassword = pwd'})
-
-externalPostgresExistingSecret :: Lens' ExternalDBParameters V1Secret
-externalPostgresExistingSecret =
-  lens _externalPostgresExistingSecret (\externalDBParameters' secret' -> externalDBParameters' {_externalPostgresExistingSecret = secret'})
 
 externalDatabase :: Lens' ExternalDBParameters DatabaseName
 externalDatabase =

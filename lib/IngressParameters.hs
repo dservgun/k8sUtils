@@ -1,7 +1,7 @@
 -- @Author: dinkar
 -- @Date:   2020-10-19 20:28:14
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-10-19 21:19:06
+-- @Last Modified time: 2021-07-04 22:58:43
 
 module IngressParameters where
 
@@ -17,7 +17,7 @@ data IngressParameters = IngressParameters {
   , _ingressHostName           :: HostName
   , _ingressTLS                :: Bool
   , _ingressAnnotation         :: Set Annotation
-  , _ingressExtraHosts         :: Map Host (Maybe V1Secret)
+
 }
 
 ingressEnabled :: Lens' IngressParameters Bool
@@ -44,9 +44,3 @@ ingressAnnotation :: Lens' IngressParameters (Set Annotation)
 ingressAnnotation =
   lens _ingressAnnotation
     (\ingressParameters' annotations' -> ingressParameters' {_ingressAnnotation = annotations'})
-
-ingressExtraHosts :: Lens' IngressParameters (Map Host (Maybe V1Secret))
-ingressExtraHosts =
-  lens _ingressExtraHosts
-    (\ingressParameters' hosts' ->
-      ingressParameters' {_ingressExtraHosts = hosts'})
