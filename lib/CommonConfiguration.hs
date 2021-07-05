@@ -35,7 +35,6 @@ data CommonConfiguration =
     , _tolerations           :: Set V1Toleration
   }
 
-
 replicaCount :: Lens' CommonConfiguration ReplicaCount
 replicaCount =
   lens _replicaCount (\commonConfiguration' count' -> commonConfiguration' {_replicaCount = count'})
