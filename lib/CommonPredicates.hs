@@ -2,11 +2,20 @@
 -- @Author: dinkar
 -- @Date:   2020-10-18 09:14:02
 -- @Last Modified by:   dinkar
--- @Last Modified time: 2020-11-06 22:48:07
+-- @Last Modified time: 2022-03-21 00:29:08
 
-module CommonPredicates where
+module CommonPredicates
+  (
+    isValidDNSLabelName
+    , isValidFailureThreshold
+    , isValidSuccessThreshold
+    , isValidConfigurationKind
+    , isValidQOS
+  )
+where
 
 import           CommonTypes
+import           ImageTypes
 import           Data.Coerce
 import           Data.Functor.Contravariant
 import           Data.Text                  as Text
@@ -62,4 +71,16 @@ isValidQOS =
       | qos == "Guaranteed" = True
       | qos == "Burstable" = True
       | qos == "BestEffort" = True
+      | otherwise = False
+
+
+isValidImagePullPolicy :: Predicate Text
+isValidImagePullPolicy =
+  Predicate $ (\a -> validImagePullPolicy a)
+  where
+    validImagePullPolicy :: Text -> Bool
+    validImagePullPolicy imagePullPolicy
+      | imagePullPolicy == "Always" = True
+      | imagePullPolicy == "Never" = True
+      | imagePullPolicy == "IfNotPresent" = True
       | otherwise = False

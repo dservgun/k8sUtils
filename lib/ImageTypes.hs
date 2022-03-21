@@ -1,4 +1,5 @@
 {-# LANGUAGE DerivingVia #-}
+
 module ImageTypes where
 
 import           Data.Text
