@@ -10,5 +10,6 @@ mkShell {
    zlib
    haskellPackages.ghc
    haskellPackages.ghcid
+   haskellPackages.ghcide
   ];
 }
